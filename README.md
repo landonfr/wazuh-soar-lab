@@ -99,7 +99,7 @@ Problems I hit getting both stacks running on Docker Desktop for Windows:
 **Discord alerts, from top to bottom:**
 1. A brand-new test file. VirusTotal returns HTTP 404 because it has never seen the hash, which is expected.
 2. A copy of `notepad.exe`. VirusTotal knows the hash and reports **0 malicious / 66 undetected**.
-3. Windows Defender catching the EICAR test file (rule 62123, level 12).
+3. Windows Defender catching the EICAR test file (rule 62123, level 12), routed through the Defender branch.
 
 ![Discord alerts](docs/screenshots/discord-alert.png)
 
