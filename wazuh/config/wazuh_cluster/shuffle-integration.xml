@@ -1,0 +1,10 @@
+  <!-- SOAR lab: send alerts to Shuffle workflow Wazuh-FIM-Triage.
+       554 = FIM file added; 62123/62125/62126 = Windows Defender detected / failed to act / critical error.
+       shuffle-backend resolves because the manager joins the shuffle_shuffle Docker network. -->
+  <integration>
+    <name>shuffle</name>
+    <hook_url>http://shuffle-backend:5001/api/v1/hooks/webhook_YOUR-SHUFFLE-WEBHOOK-ID</hook_url>
+    <!-- Shuffle's Route_Alert node sends 554 to VirusTotal and the Defender rules to Discord_Defender_Alert -->
+    <rule_id>554,62123,62125,62126</rule_id>
+    <alert_format>json</alert_format>
+  </integration>

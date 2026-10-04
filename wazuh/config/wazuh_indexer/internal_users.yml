@@ -1,0 +1,20 @@
+---
+# This is the internal user database
+# The hash value is a bcrypt hash and can be generated with plugin/tools/hash.sh
+# Passwords rotated 2026-09-29 (see .env.example). Demo users removed.
+
+_meta:
+  type: "internalusers"
+  config_version: 2
+
+admin:
+  hash: "<bcrypt hash - generate with: docker run --rm -ti wazuh/wazuh-indexer:4.14.8 bash /usr/share/wazuh-indexer/plugins/opensearch-security/tools/hash.sh>"
+  reserved: true
+  backend_roles:
+  - "admin"
+  description: "Admin user"
+
+kibanaserver:
+  hash: "<bcrypt hash - generate with: docker run --rm -ti wazuh/wazuh-indexer:4.14.8 bash /usr/share/wazuh-indexer/plugins/opensearch-security/tools/hash.sh>"
+  reserved: true
+  description: "Dashboard server user"
