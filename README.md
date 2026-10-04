@@ -95,7 +95,10 @@ Problems I hit getting both stacks running on Docker Desktop for Windows:
 
 ![Shuffle workflow](docs/screenshots/shuffle-workflow.png)
 
-**Discord alerts:** a FIM alert with its SHA-256 and VirusTotal result, and a Windows Defender detection of the EICAR test file (rule 62123, level 12). VirusTotal returns HTTP 404 for the FIM test file because a freshly created file's hash has never been seen by VirusTotal, which is expected.
+**Discord alerts, from top to bottom:**
+1. A brand-new test file. VirusTotal returns HTTP 404 because it has never seen the hash, which is expected.
+2. A copy of `notepad.exe`. VirusTotal knows the hash and reports **0 malicious / 66 undetected**.
+3. Windows Defender catching the EICAR test file (rule 62123, level 12).
 
 ![Discord alerts](docs/screenshots/discord-alert.png)
 
