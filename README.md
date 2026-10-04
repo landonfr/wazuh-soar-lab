@@ -64,6 +64,7 @@ Problems I hit getting both stacks running on Docker Desktop for Windows:
 | Worker containers piling up | `CLEANUP=false` keeps every run's container | Set `CLEANUP=true` |
 | Memory pressure | Shuffle's OpenSearch defaulted to a 3 GB heap next to Wazuh's indexer | Lowered the heap to 1.5 GB |
 | Wazuh couldn't reach the Shuffle webhook | The two stacks were on separate Docker networks | Added the external `shuffle_shuffle` network to the Wazuh manager |
+| Live alerts reached Discord with blank fields, and file alerts took the Defender branch | Wazuh's `shuffle` integration wraps each alert as `{rule_id, title, ..., all_fields: <alert>}`, so `$exec.rule.id` didn't exist. `Route_Alert` raised `shuffle_variable_error`, the empty rule ID matched "does not equal 554", and everything went to the Defender node | Changed every variable to `$exec.all_fields.*` (for example `$exec.all_fields.rule.id`) |
 | Agent suddenly "Disconnected" after a reboot; the manager had no host ports open | Windows reserved TCP 54970–55069 (`netsh int ipv4 show excludedportrange protocol=tcp`), which includes the Wazuh API port 55000, so Docker Desktop published none of the manager's ports | Stopped publishing 55000 to the host, since the dashboard reaches the API over the Docker network; the agent reconnected |
 
 ## Setup
@@ -90,8 +91,17 @@ Problems I hit getting both stacks running on Docker Desktop for Windows:
 
 ## Screenshots
 
-<!-- Add: Wazuh alert, Shuffle workflow canvas, Discord notification -->
-_Coming soon._
+**Wazuh-FIM-Triage workflow in Shuffle:** the webhook trigger, `Route_Alert`, the VirusTotal lookup and the two Discord nodes.
+
+![Shuffle workflow](docs/screenshots/shuffle-workflow.png)
+
+**Discord alerts:** a FIM alert with its SHA-256 and VirusTotal result, and a Windows Defender detection of the EICAR test file (rule 62123, level 12). VirusTotal returns HTTP 404 for the FIM test file because a freshly created file's hash has never been seen by VirusTotal, which is expected.
+
+![Discord alerts](docs/screenshots/discord-alert.png)
+
+**Wazuh Threat Hunting:** events from the Windows agent, including the rule 554 "File added to the system" alert that starts the workflow.
+
+![Wazuh alerts](docs/screenshots/wazuh-alert.png)
 
 ## Skills demonstrated
 
