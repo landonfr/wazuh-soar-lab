@@ -46,7 +46,7 @@ These are the files I changed. The rest comes from the official [wazuh-docker](h
 
 ## Hardening
 
-- **Every port bound to `127.0.0.1`**: the Wazuh manager, indexer, API and dashboard, plus the Shuffle frontend and backend. Nothing in the lab can be reached from the LAN.
+- **Every published port bound to `127.0.0.1`**: the Wazuh manager, indexer and dashboard, plus the Shuffle frontend and backend. The Wazuh API (55000) isn't published at all. Nothing in the lab can be reached from the LAN.
 - **Default credentials replaced.** The stock passwords (`SecretPassword`, `MyS3cr37P450r.*-`, `kibanaserver`) were rotated and moved into a `.env` file referenced as `${VARS}`.
 - **Demo users removed from the indexer** (`kibanaro`, `logstash`, `readall`, `snapshotrestore`).
 - **`restart: unless-stopped`** instead of `always`, so a stopped lab stays stopped.
@@ -64,6 +64,7 @@ Problems I hit getting both stacks running on Docker Desktop for Windows:
 | Worker containers piling up | `CLEANUP=false` keeps every run's container | Set `CLEANUP=true` |
 | Memory pressure | Shuffle's OpenSearch defaulted to a 3 GB heap next to Wazuh's indexer | Lowered the heap to 1.5 GB |
 | Wazuh couldn't reach the Shuffle webhook | The two stacks were on separate Docker networks | Added the external `shuffle_shuffle` network to the Wazuh manager |
+| Agent suddenly "Disconnected" after a reboot; the manager had no host ports open | Windows reserved TCP 54970–55069 (`netsh int ipv4 show excludedportrange protocol=tcp`), which includes the Wazuh API port 55000, so Docker Desktop published none of the manager's ports | Stopped publishing 55000 to the host, since the dashboard reaches the API over the Docker network; the agent reconnected |
 
 ## Setup
 

@@ -17,7 +17,8 @@ services:
       - "127.0.0.1:1514:1514"
       - "127.0.0.1:1515:1515"
       - "127.0.0.1:514:514/udp"
-      - "127.0.0.1:55000:55000"
+      # 55000 (Wazuh API) not published: the dashboard reaches it over the Docker network,
+      # and Windows often reserves 54970-55069 (see: netsh int ipv4 show excludedportrange).
     environment:
       - INDEXER_URL="https://wazuh.indexer:9200"
       - INDEXER_USERNAME=admin
